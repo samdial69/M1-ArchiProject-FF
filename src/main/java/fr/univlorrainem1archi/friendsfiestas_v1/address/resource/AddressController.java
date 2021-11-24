@@ -41,7 +41,7 @@ public class AddressController {
 
     @PutMapping("/modifier/{id}")
     public ResponseEntity<Response> update(@PathVariable Long id,@Valid @RequestBody  Address address){
-        if(!addressService.existAddress(id)){
+        if(!addressService.existById(id)){
           return (ResponseEntity<Response>) ResponseEntity.notFound();
         }
         return new ResponseBuilder(OK,"Address Updated successfully!","address",addressService.update(id,address)).buildResponse();
@@ -49,7 +49,7 @@ public class AddressController {
 
     @DeleteMapping("/supprimer/{id}")
     public ResponseEntity<Response> delete(@PathVariable Long id){
-        if(!addressService.existAddress(id)){
+        if(!addressService.existById(id)){
             return (ResponseEntity<Response>) ResponseEntity.notFound();
         }
         return new ResponseBuilder(OK,"Address deleted Successfully","IsDeleted",addressService.delete(id)).buildResponse();

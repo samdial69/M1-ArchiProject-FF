@@ -1,7 +1,7 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.address.service;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
-import fr.univlorrainem1archi.friendsfiestas_v1.address.repo.AddressRepo;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.repository.AddressRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,14 +48,14 @@ public class AddressService implements IAddressService{
     @Override
     public boolean delete(Long id) {
         log.info("Deleting address by id {}:", id);
-        if (existAddress(id)){
+        if (!existById(id)){
             throw  new IllegalArgumentException("No address found by id:"+ id);
         }
         addressRepo.deleteById(id);
         return true;
     }
 
-    public boolean existAddress(Long id){
+    public boolean existById(Long id){
         return addressRepo.existsById(id);
     }
 }

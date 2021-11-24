@@ -1,4 +1,4 @@
-package fr.univlorrainem1archi.friendsfiestas_v1.address.repo;
+package fr.univlorrainem1archi.friendsfiestas_v1.address.repository;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

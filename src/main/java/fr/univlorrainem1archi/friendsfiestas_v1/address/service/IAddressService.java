@@ -1,7 +1,6 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.address.service;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
-import fr.univlorrainem1archi.friendsfiestas_v1.address.repo.AddressRepo;
 
 import java.util.List;
 
