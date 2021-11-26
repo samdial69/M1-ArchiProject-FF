@@ -29,9 +29,9 @@ public class AddressController {
         return new ResponseBuilder(OK,"Retrieving all addresses","addresses",addressService.getAddresses()).buildResponse();
     }
 
-    @GetMapping("/voir-addresse")
-    public ResponseEntity<Response> getAddress(Address address){
-        return new ResponseBuilder(OK,"Retrieve an address","address",addressService.getAddress(address)).buildResponse();
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> getAddress(@PathVariable("id") Long id){
+        return new ResponseBuilder(OK,"Retrieve an address","address",addressService.getAddress(id)).buildResponse();
     }
 
     @PostMapping("/ajouter")
@@ -40,7 +40,7 @@ public class AddressController {
     }
 
     @PutMapping("/modifier/{id}")
-    public ResponseEntity<Response> update(@PathVariable Long id,@Valid @RequestBody  Address address){
+    public ResponseEntity<Response> update(@PathVariable("id") Long id,@Valid @RequestBody  Address address){
         if(!addressService.existById(id)){
           return (ResponseEntity<Response>) ResponseEntity.notFound();
         }
@@ -48,7 +48,7 @@ public class AddressController {
     }
 
     @DeleteMapping("/supprimer/{id}")
-    public ResponseEntity<Response> delete(@PathVariable Long id){
+    public ResponseEntity<Response> delete(@PathVariable("id") Long id){
         if(!addressService.existById(id)){
             return (ResponseEntity<Response>) ResponseEntity.notFound();
         }

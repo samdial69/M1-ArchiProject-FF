@@ -22,7 +22,7 @@ public class Address {
     private Long id;
 
     @NotBlank(message = "Ce champ ne doit pas être vide")
-    @Size(min = 10, message = "Ce champ doit contenir minimum 10 caractères")
+    @Size(min = 5, message = "Ce champ doit contenir minimum 10 caractères")
     private String street;
 
     @NotBlank(message = "Ce champ ne doit pas être vide")

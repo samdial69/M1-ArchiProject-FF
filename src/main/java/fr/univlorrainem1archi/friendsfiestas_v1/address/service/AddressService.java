@@ -27,9 +27,9 @@ public class AddressService implements IAddressService{
     }
 
     @Override
-    public Address getAddress(Address address) {
-        log.info("Retrieve an address {}",address.getCompleteAddress());
-        return addressRepo.findById(address.getId()).orElseThrow();
+    public Address getAddress(Long id) {
+        log.info("Retrieve an address by id {}",id);
+        return addressRepo.findById(id).orElseThrow();
     }
 
     @Override
