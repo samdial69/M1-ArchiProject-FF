@@ -5,6 +5,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,12 @@ public class SalonController {
         return new ResponseBuilder(OK,"Adding successfully an address to the salon",
                 "salon",
                 salonService.saveOrUpdateAddressInSalon(idSalon,null,address)).buildResponse();
+    }
+
+    @PostMapping("/{idSalon}/ajouter-taches/")
+    public ResponseEntity<Response> addTask(@PathVariable("idSalon") Long id, @RequestBody Task task){
+        return new ResponseBuilder(OK,"Adding a task to a salon successfully!","salon",
+                salonService.addTask(id,task)).buildResponse();
     }
 
 }

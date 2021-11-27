@@ -5,6 +5,8 @@ import fr.univlorrainem1archi.friendsfiestas_v1.address.repository.AddressRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,13 @@ import java.util.List;
 public class SalonService implements ISalonService{
     private final SalonRepo salonRepo;
     private final AddressService addressService;
+    private final TaskService taskService;
 
     @Autowired
-    public SalonService(SalonRepo salonRepo,AddressService addressService) {
+    public SalonService(SalonRepo salonRepo,AddressService addressService,TaskService taskService) {
         this.salonRepo = salonRepo;
         this.addressService = addressService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -67,24 +71,16 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public Salon updateAddressInSalon(Long salonId,Long addressId, Address address) {
-        if (!existById(salonId)){
+    public Salon addTask(Long salonId, Task task) {
+        if(!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
-        addressService.update(addressId,address);
-        Salon salon = salonRepo.findById(salonId).orElseThrow();
-        salon.setAddressEvent(address);
-        return salonRepo.save(salon);
-    }
+        Salon salon = getSalon(salonId);
+        task.setSalon(salon);
+        taskService.create(task);
 
-    @Override
-    public Salon saveAddressInSalon(Long salonId, Address address) {
-        if (!existById(salonId)){
-            throw new IllegalArgumentException("Not salon found by id: "+salonId);
-        }
-        addressService.create(address);
-        Salon salon = salonRepo.findById(salonId).orElseThrow();
-        salon.setAddressEvent(address);
+//        salon.setTasks(List.of(task));
+
         return salonRepo.save(salon);
     }
 
@@ -98,7 +94,7 @@ public class SalonService implements ISalonService{
         }else {
             addressService.update(addressId,address);
         }
-        Salon salon = salonRepo.findById(salonId).orElseThrow();
+        Salon salon = getSalon(salonId);
         salon.setAddressEvent(address);
         return salonRepo.save(salon);
     }
