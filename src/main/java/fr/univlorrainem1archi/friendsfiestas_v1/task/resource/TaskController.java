@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/v1/friends-fiestas/taches/")
+@RequestMapping("api/v1/friends-fiestas/taches")
 public class TaskController {
     private final TaskService taskService;
 
@@ -25,8 +25,8 @@ public class TaskController {
         return new ResponseBuilder(HttpStatus.OK,"Retrieving all tasks","tasks",taskService.getTasks()).buildResponse();
     }
 
-    @GetMapping("/voir-taches")
-    public ResponseEntity<Response> getTask(Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Response> getTask(@PathVariable("id") Long id){
         return new ResponseBuilder(HttpStatus.OK,"Retrieving a task","task",taskService.getTask(id)).buildResponse();
     }
 
