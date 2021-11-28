@@ -3,6 +3,8 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.services;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.repository.AddressRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
+import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
+import fr.univlorrainem1archi.friendsfiestas_v1.message.services.MessageService;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
@@ -21,12 +23,15 @@ public class SalonService implements ISalonService{
     private final SalonRepo salonRepo;
     private final AddressService addressService;
     private final TaskService taskService;
+    private final MessageService messageService;
 
     @Autowired
-    public SalonService(SalonRepo salonRepo,AddressService addressService,TaskService taskService) {
+    public SalonService(SalonRepo salonRepo,AddressService addressService,TaskService taskService,
+                        MessageService messageService) {
         this.salonRepo = salonRepo;
         this.addressService = addressService;
         this.taskService = taskService;
+        this.messageService = messageService;
     }
 
     @Override
@@ -47,6 +52,7 @@ public class SalonService implements ISalonService{
     @Override
     public Salon create(Salon salon) {
         log.info("Creating a salon : "+salon.getName());
+        //TODO set le host à partir de là quand on implementera Spring-security
         return salonRepo.save(salon);
     }
 
@@ -68,6 +74,17 @@ public class SalonService implements ISalonService{
         log.info("Deleting a salon by id: {}",id);
         salonRepo.deleteById(id);
         return true;
+    }
+
+    @Override
+    public Salon addMessage(Long salonId, Message message) {
+        if(!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        Salon salon = getSalon(salonId);
+        message.setSalon(salon);
+        messageService.create(message);
+        return salonRepo.save(salon);
     }
 
     @Override
