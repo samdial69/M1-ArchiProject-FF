@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IUser {
     List<User> getUsers();
+    boolean existById(Long idUser);
 }

@@ -1,14 +1,16 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.salon.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
-import fr.univlorrainem1archi.friendsfiestas_v1.address.repository.AddressRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
-import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
+import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
+import fr.univlorrainem1archi.friendsfiestas_v1.member.services.MemberService;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.services.MessageService;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,15 +25,21 @@ public class SalonService implements ISalonService{
     private final SalonRepo salonRepo;
     private final AddressService addressService;
     private final TaskService taskService;
+    private final UserService userService;
+    private final MemberService memberService;
     private final MessageService messageService;
 
     @Autowired
-    public SalonService(SalonRepo salonRepo,AddressService addressService,TaskService taskService,
-                        MessageService messageService) {
+    public SalonService(SalonRepo salonRepo, AddressService addressService, TaskService taskService,
+                        MessageService messageService,
+                        UserService userService,
+                        MemberService memberService) {
         this.salonRepo = salonRepo;
         this.addressService = addressService;
         this.taskService = taskService;
         this.messageService = messageService;
+        this.userService = userService;
+        this.memberService = memberService;
     }
 
     @Override
@@ -76,16 +84,16 @@ public class SalonService implements ISalonService{
         return true;
     }
 
-    @Override
-    public Salon addMessage(Long salonId, Message message) {
-        if(!existById(salonId)){
-            throw new IllegalArgumentException("Not salon found by id: "+salonId);
-        }
-        Salon salon = getSalon(salonId);
-        message.setSalon(salon);
-        messageService.create(message);
-        return salonRepo.save(salon);
-    }
+//    @Override
+//    public Salon addMessage(Long salonId, Message message) {
+//        if(!existById(salonId)){
+//            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+//        }
+//        Salon salon = getSalon(salonId);
+//        message.setSalon(salon);
+//        messageService.create(message);
+//        return salonRepo.save(salon);
+//    }
 
     @Override
     public Salon addTask(Long salonId, Task task) {
@@ -95,10 +103,7 @@ public class SalonService implements ISalonService{
         Salon salon = getSalon(salonId);
         task.setSalon(salon);
         taskService.create(task);
-
-//        salon.setTasks(List.of(task));
-
-        return salonRepo.save(salon);
+        return salon;
     }
 
     @Override
@@ -111,12 +116,31 @@ public class SalonService implements ISalonService{
         }else {
             addressService.update(addressId,address);
         }
-        Salon salon = getSalon(salonId);
+        Salon salon = this.getSalon(salonId);
         salon.setAddressEvent(address);
-        return salonRepo.save(salon);
+        salonRepo.save(salon);
+        return salon;
     }
 
     public boolean existById(Long id){
         return salonRepo.existsById(id);
+    }
+
+    public Salon addMemberToSalon(Long idSalon, Long idUser) {
+        if (!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        if (!userService.existById(idUser)){
+            throw new IllegalArgumentException("Not user found by id: "+idSalon);
+        }
+        Salon salon = this.getSalon(idSalon);
+        User user = userService.getUser(idUser);
+
+        Member member = new Member();
+        member.setSalon(salon);
+        member.setUser(user);
+
+        memberService.create(member);
+        return salon;
     }
 }

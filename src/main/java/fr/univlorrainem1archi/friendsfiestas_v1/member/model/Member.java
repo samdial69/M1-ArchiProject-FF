@@ -1,8 +1,8 @@
-package fr.univlorrainem1archi.friendsfiestas_v1.task.models;
+package fr.univlorrainem1archi.friendsfiestas_v1.member.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
+import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import lombok.AllArgsConstructor;
@@ -10,27 +10,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.AUTO;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task {
+public class Member {
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String description;
+
+    @OneToOne
+    private User user;
 
     @ManyToOne
     @JsonBackReference
     private Salon salon;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Member affectedMember;
+    private String presence;
 
-    public String toString(){
-        return this.getDescription();
-    }
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "member")
+    @JsonManagedReference
+    private List<Message> messages;
 }

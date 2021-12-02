@@ -1,6 +1,8 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.message.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +22,7 @@ public class Message {
 
     @ManyToOne
     @JsonBackReference
-    private Salon salon;
+    private Member member;
 
     public Message() {
         this.sendAt = LocalDateTime.now();

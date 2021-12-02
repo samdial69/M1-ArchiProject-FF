@@ -1,8 +1,8 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.user.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,8 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +23,8 @@ public class User {
     private String pseudo;
     private String password;
 
-    @OneToMany(mappedBy = "host",cascade = CascadeType.ALL)
-    @JsonBackReference
-    private List<Salon> salons;
+
+    public String toString(){
+        return this.getPseudo();
+    }
 }

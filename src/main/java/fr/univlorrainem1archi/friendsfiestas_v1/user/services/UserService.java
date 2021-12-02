@@ -24,4 +24,12 @@ public class UserService implements IUser{
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public boolean existById(Long idUser) {
+        return userRepository.existsById(idUser);
+    }
+
+    public User getUser(Long idUser) {
+        return userRepository.findById(idUser).orElseThrow();
+    }
 }

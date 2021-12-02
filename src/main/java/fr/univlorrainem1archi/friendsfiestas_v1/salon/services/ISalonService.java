@@ -16,5 +16,6 @@ public interface ISalonService {
 
     Salon saveOrUpdateAddressInSalon(Long salonId,Long addressId, Address address);
     Salon addTask(Long salonId, Task task);
-    Salon addMessage(Long salonId, Message message);
+    Salon addMemberToSalon(Long idSalon,Long idUser);
+//    Salon addMessage(Long salonId, Message message);
 }

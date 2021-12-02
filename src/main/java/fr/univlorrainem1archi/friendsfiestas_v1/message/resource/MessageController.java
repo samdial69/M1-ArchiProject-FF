@@ -20,22 +20,22 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping("/{salonId}")
-    public ResponseEntity<Response> getMessages(@PathVariable("salonId") Long salonId){
-        return new ResponseBuilder(OK,"Retrieving all messages in a salon id: "+salonId,
-                "messages",messageService.getMessages(salonId)).buildResponse();
-    }
-
-    @PostMapping("/ajouter")
-    public ResponseEntity<Response> create(@RequestBody Message message)
-    {
-        return new ResponseBuilder(CREATED,"Create new message successfully!","message",
-                messageService.create(message)).buildResponse();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Response> delete(@PathVariable("id") Long id){
-        return new ResponseBuilder(OK,"Deleting message successfully!","isDeleted",
-                messageService.delete(id)).buildResponse();
-    }
+//    @GetMapping("/{salonId}")
+//    public ResponseEntity<Response> getMessages(@PathVariable("salonId") Long salonId){
+//        return new ResponseBuilder(OK,"Retrieving all messages in a salon id: "+salonId,
+//                "messages",messageService.getMessages(salonId)).buildResponse();
+//    }
+//
+//    @PostMapping("/ajouter")
+//    public ResponseEntity<Response> create(@RequestBody Message message)
+//    {
+//        return new ResponseBuilder(CREATED,"Create new message successfully!","message",
+//                messageService.create(message)).buildResponse();
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Response> delete(@PathVariable("id") Long id){
+//        return new ResponseBuilder(OK,"Deleting message successfully!","isDeleted",
+//                messageService.delete(id)).buildResponse();
+//    }
 }

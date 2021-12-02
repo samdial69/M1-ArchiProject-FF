@@ -2,9 +2,8 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
-import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
+import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
-import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,19 +25,19 @@ public class Salon {
     private String description;
     private Date dateEvent;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToOne(cascade = CascadeType.ALL)
     private Address addressEvent;
 
-    @OneToMany(mappedBy = "salon",cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "salon")
     @JsonManagedReference
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "salon",cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "salon")
     @JsonManagedReference
-    private List<Message> messages;
+    private List<Member> members;
 
-    @ManyToOne
-    @JsonManagedReference
-    private User host;
+    public String toString(){
+        return this.getName();
+    }
 
 }

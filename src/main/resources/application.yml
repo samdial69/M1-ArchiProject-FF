@@ -7,4 +7,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
+springdoc:
+  api-docs:
+    path: /api-docs

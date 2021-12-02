@@ -8,6 +8,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,17 +67,22 @@ public class SalonController {
                 salonService.saveOrUpdateAddressInSalon(idSalon,null,address)).buildResponse();
     }
 
-    @PostMapping("/{idSalon}/ajouter-tache/")
-    public ResponseEntity<Response> addTask(@PathVariable("idSalon") Long id, @RequestBody Task task){
+    @PostMapping(value = "/{idSalon}/ajouter-tache")
+    public ResponseEntity<Response> addTask(@PathVariable("idSalon") Long idSalon, @RequestBody Task task){
         return new ResponseBuilder(OK,"Adding a task to a salon successfully!","salon",
-                salonService.addTask(id,task)).buildResponse();
+                salonService.addTask(idSalon,task)).buildResponse();
     }
 
-    @PostMapping("/{idSalon}/ajouter-message")
-    public ResponseEntity<Response> addMessage(@PathVariable("idSalon") Long idSalon, @RequestBody Message message)
-    {
-        return new ResponseBuilder(OK,"Adding a new message to a salon successfully!","salon",
-                salonService.addMessage(idSalon,message)).buildResponse();
+    @GetMapping("/{idSalon}/ajouter-membre/{idUser}")
+    public ResponseEntity<Response> addMembreToSalon(@PathVariable("idSalon") Long idSalon,@PathVariable("idUser") Long idUser){
+        return new ResponseBuilder(OK,"Adding user to a salon : become member","salon",
+                salonService.addMemberToSalon(idSalon,idUser)).buildResponse();
     }
+//    @PostMapping("/{idSalon}/ajouter-message")
+//    public ResponseEntity<Response> addMessage(@PathVariable("idSalon") Long idSalon, @RequestBody Message message)
+//    {
+//        return new ResponseBuilder(OK,"Adding a new message to a salon successfully!","salon",
+//                salonService.addMessage(idSalon,message)).buildResponse();
+//    }
 
 }
