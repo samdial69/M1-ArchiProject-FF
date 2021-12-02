@@ -1,5 +1,7 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.user.services;
 
+import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.EmailExistException;
+import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.UsernameExistException;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 
 import java.util.List;
@@ -7,4 +9,8 @@ import java.util.List;
 public interface IUser {
     List<User> getUsers();
     boolean existById(Long idUser);
+    User findUserByPseudo(String pseudo);
+    User findUserByEmail(String email);
+//    User login(User user);
+    User register(User user) throws EmailExistException, UsernameExistException;
 }
