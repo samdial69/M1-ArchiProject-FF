@@ -1,6 +1,9 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.address.service;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.AddressDTO;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.AddressMapper;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.repository.AddressRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,12 @@ import java.util.List;
 @Slf4j
 public class AddressService implements IAddressService{
     private final AddressRepo addressRepo;
+    private final AddressMapper addressMapper;
 
     @Autowired
-    public AddressService(AddressRepo addressRepo) {
+    public AddressService(AddressRepo addressRepo, AddressMapper addressMapper) {
         this.addressRepo = addressRepo;
+        this.addressMapper = addressMapper;
     }
 
     @Override
@@ -33,16 +38,23 @@ public class AddressService implements IAddressService{
     }
 
     @Override
-    public Address create(Address address) {
+    public Address create(RequestBodyAddress address) {
         log.info("Saving an address {}",address.getCompleteAddress());
-        return addressRepo.save(address);
+        AddressDTO addressDTO = addressMapper.to(address);
+        return addressRepo.save(this.addressMapper.to(addressDTO));
+    }
+
+    public Address convert(RequestBodyAddress address){
+        AddressDTO addressDTO = addressMapper.to(address);
+        return this.addressMapper.to(addressDTO);
     }
 
     @Override
-    public Address update(Long id, Address address) {
+    public Address update(Long id, RequestBodyAddress address) {
         log.info("Update an address {}",address.getCompleteAddress());
-        address.setId(id);
-        return addressRepo.save(address);
+        AddressDTO addressDTO = addressMapper.to(address);
+        addressDTO.setId(id);
+        return addressRepo.save(this.addressMapper.to(addressDTO));
     }
 
     @Override

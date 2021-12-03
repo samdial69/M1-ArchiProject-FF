@@ -1,12 +1,15 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.salon.services;
 
-import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.services.MemberService;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.services.MessageService;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.SalonDTO;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.SalonMapper;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
@@ -26,6 +29,8 @@ import java.util.List;
 @Slf4j
 public class SalonService implements ISalonService{
     private final SalonRepo salonRepo;
+    private final SalonMapper salonMapper;
+
     private final AddressService addressService;
     private final TaskService taskService;
     private final UserService userService;
@@ -33,11 +38,12 @@ public class SalonService implements ISalonService{
     private final MessageService messageService;
 
     @Autowired
-    public SalonService(SalonRepo salonRepo, AddressService addressService, TaskService taskService,
+    public SalonService(SalonRepo salonRepo, SalonMapper salonMapper, AddressService addressService, TaskService taskService,
                         MessageService messageService,
                         UserService userService,
                         MemberService memberService) {
         this.salonRepo = salonRepo;
+        this.salonMapper = salonMapper;
         this.addressService = addressService;
         this.taskService = taskService;
         this.messageService = messageService;
@@ -61,10 +67,12 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public Salon create(Salon salon) {
-        log.info("Creating a salon : "+salon.getName());
+    public Salon create(RequestBodySalon salonBody) {
+        log.info("Creating a salon : "+salonBody.getName());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = userService.findUserByPseudo(authentication.getName());
+
+        Salon salon = convert(salonBody);
         salon.setHost(loggedUser);
         Member member = new Member();
         member.setSalon(salon);
@@ -75,13 +83,14 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public Salon update(Long id, Salon salon) {
+    public Salon update(Long id, RequestBodySalon salon) {
         if (!existById(id)){
             throw new IllegalArgumentException("Not salon found by id: "+id);
         }
         log.info("Updating a salon by id: {}",id);
-        salon.setId(id);
-        return salonRepo.save(salon) ;
+        SalonDTO salonDTO = salonMapper.to(salon);
+        salonDTO.setId(id);
+        return salonRepo.save(this.salonMapper.to(salonDTO)) ;
     }
 
     @Override
@@ -117,7 +126,7 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public Salon saveOrUpdateAddressInSalon(Long salonId,Long addressId,Address address){
+    public Salon saveOrUpdateAddressInSalon(Long salonId, Long addressId, RequestBodyAddress address){
         if(!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
@@ -127,7 +136,8 @@ public class SalonService implements ISalonService{
             addressService.update(addressId,address);
         }
         Salon salon = this.getSalon(salonId);
-        salon.setAddressEvent(address);
+
+        salon.setAddressEvent(this.addressService.convert(address));
         salonRepo.save(salon);
         return salon;
     }
@@ -220,5 +230,10 @@ public class SalonService implements ISalonService{
             throw new IllegalArgumentException("Tu devrais arriver ici!");
         }
         return this.getSalon(idSalon);
+    }
+
+    private Salon convert(RequestBodySalon salon){
+        SalonDTO salonDTO = this.salonMapper.to(salon);
+        return this.salonMapper.to(salonDTO);
     }
 }

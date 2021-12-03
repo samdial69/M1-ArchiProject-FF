@@ -1,6 +1,6 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.address.resource;
 
-import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
@@ -35,12 +35,12 @@ public class AddressController {
     }
 
     @PostMapping("/ajouter")
-    public ResponseEntity<Response> create(@Valid @RequestBody Address address){
+    public ResponseEntity<Response> create(@Valid @RequestBody RequestBodyAddress address){
         return new ResponseBuilder(CREATED,"Address created successfully!","address",addressService.create(address)).buildResponse();
     }
 
     @PutMapping("/modifier/{id}")
-    public ResponseEntity<Response> update(@PathVariable("id") Long id,@Valid @RequestBody  Address address){
+    public ResponseEntity<Response> update(@PathVariable("id") Long id,@Valid @RequestBody  RequestBodyAddress address){
         if(!addressService.existById(id)){
           return (ResponseEntity<Response>) ResponseEntity.notFound();
         }

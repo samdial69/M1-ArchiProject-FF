@@ -1,10 +1,10 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.salon.resource;
 
-import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
+import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
-import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,12 @@ public class SalonController {
     }
 
     @PostMapping("/ajouter")
-    public ResponseEntity<Response> create(@RequestBody Salon salon){
+    public ResponseEntity<Response> create(@RequestBody RequestBodySalon salon){
         return new ResponseBuilder(CREATED,"Created successfully","salon",salonService.create(salon)).buildResponse();
     }
 
     @PutMapping("/modifier/{id}")
-    public ResponseEntity<Response> update(@PathVariable("id") Long id, @RequestBody Salon salon){
+    public ResponseEntity<Response> update(@PathVariable("id") Long id, @RequestBody RequestBodySalon salon){
         return new ResponseBuilder(OK,"Updated successfully","salon",salonService.update(id,salon)).buildResponse();
     }
 
@@ -52,7 +52,7 @@ public class SalonController {
     @PutMapping("/{idSalon}/modifier-adresse/{idAddress}")
     public ResponseEntity<Response> updateAddress(@PathVariable("idSalon") Long idSalon,
                                                   @PathVariable("idAddress") Long idAddress,
-                                                  @RequestBody Address address)
+                                                  @RequestBody RequestBodyAddress address)
     {
         return new ResponseBuilder(OK,"Updated event address successfully!",
                 "salon",
@@ -61,7 +61,7 @@ public class SalonController {
     }
 
     @PostMapping("/{idSalon}/ajouter-adresse")
-    public ResponseEntity<Response> addAddress(@PathVariable("idSalon") Long idSalon,@RequestBody Address address){
+    public ResponseEntity<Response> addAddress(@PathVariable("idSalon") Long idSalon,@RequestBody RequestBodyAddress address){
         return new ResponseBuilder(OK,"Adding successfully an address to the salon",
                 "salon",
                 salonService.saveOrUpdateAddressInSalon(idSalon,null,address)).buildResponse();
