@@ -11,6 +11,6 @@ public interface IUser {
     boolean existById(Long idUser);
     User findUserByPseudo(String pseudo);
     User findUserByEmail(String email);
-//    User login(User user);
+    List<Object> login(User user);
     User register(User user) throws EmailExistException, UsernameExistException;
 }

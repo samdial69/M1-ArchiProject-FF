@@ -3,16 +3,15 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.resource;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
-import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("api/v1/friends-fiestas/salons")
@@ -78,6 +77,7 @@ public class SalonController {
         return new ResponseBuilder(OK,"Adding user to a salon : become member","salon",
                 salonService.addMemberToSalon(idSalon,idUser)).buildResponse();
     }
+
 //    @PostMapping("/{idSalon}/ajouter-message")
 //    public ResponseEntity<Response> addMessage(@PathVariable("idSalon") Long idSalon, @RequestBody Message message)
 //    {
