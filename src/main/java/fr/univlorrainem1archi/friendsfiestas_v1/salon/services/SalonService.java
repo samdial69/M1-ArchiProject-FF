@@ -143,4 +143,25 @@ public class SalonService implements ISalonService{
         memberService.create(member);
         return salon;
     }
+
+    public Salon validateTask(Long idSalon, Long idMember, Long idTask) {
+        if(!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        /*if(!memberService.existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }*/
+        if(!taskService.existById(idTask)){
+            throw new IllegalArgumentException("Not task found by id: "+idTask);
+        }
+        Task task = taskService.getTask(idTask);
+        if(task.getSalon().getId().equals(idSalon)) {
+            task.setDone(true);
+            taskService.update(idTask, task);
+        }
+        else {
+            throw new IllegalArgumentException("Task by id " + idTask + " is not in this salon");
+        }
+        return this.getSalon(idSalon);
+    }
 }

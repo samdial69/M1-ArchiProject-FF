@@ -7,6 +7,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,6 +77,12 @@ public class SalonController {
     public ResponseEntity<Response> addMembreToSalon(@PathVariable("idSalon") Long idSalon,@PathVariable("idUser") Long idUser){
         return new ResponseBuilder(OK,"Adding user to a salon : become member","salon",
                 salonService.addMemberToSalon(idSalon,idUser)).buildResponse();
+    }
+
+    @PutMapping("/{idSalon}/member/{idMember}valider-tache/{idTask}")
+    public ResponseEntity<Response> validateTask(@PathVariable("idSalon") Long idSalon, @PathVariable("idMember") Long idMember, @PathVariable("idTask") Long idTask){
+        return new ResponseBuilder(OK, "Tâche validée avec succès", "salon",
+                salonService.validateTask(idSalon, idMember, idTask)).buildResponse();
     }
 
 //    @PostMapping("/{idSalon}/ajouter-message")

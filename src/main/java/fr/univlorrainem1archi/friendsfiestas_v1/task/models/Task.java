@@ -30,6 +30,8 @@ public class Task {
     @OneToOne(cascade = CascadeType.ALL)
     private Member affectedMember;
 
+    private boolean done;
+
     public String toString(){
         return this.getDescription();
     }

@@ -18,4 +18,6 @@ public interface ISalonService {
     Salon addTask(Long salonId, Task task);
     Salon addMemberToSalon(Long idSalon,Long idUser);
 //    Salon addMessage(Long salonId, Message message);
+
+    Salon validateTask(Long idSalon, Long idMember, Long idTask);
 }
