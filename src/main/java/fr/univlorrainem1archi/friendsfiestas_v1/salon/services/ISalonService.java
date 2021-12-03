@@ -1,6 +1,7 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.salon.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
+import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 
@@ -17,7 +18,7 @@ public interface ISalonService {
     Salon addTask(Long salonId, Task task);
     Salon addMemberToSalon(Long idSalon,Long idUser);
     Salon affectMemberToTask(Long salonId, Long idTask, Long idMember);
-//    Salon addMessage(Long salonId, Message message);
+    Salon addMessage(Long idSalon, Long idMember, Message message);
 
     Salon validateTask(Long idSalon, Long idMember, Long idTask);
 }

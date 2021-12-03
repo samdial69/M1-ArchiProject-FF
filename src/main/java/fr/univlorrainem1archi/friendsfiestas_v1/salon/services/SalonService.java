@@ -4,6 +4,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.services.MemberService;
+import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.services.MessageService;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
@@ -63,9 +64,14 @@ public class SalonService implements ISalonService{
     public Salon create(Salon salon) {
         log.info("Creating a salon : "+salon.getName());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        //TODO set le host à partir de là quand on implementera Spring-security
-        return salonRepo.save(salon);
+        User loggedUser = userService.findUserByPseudo(authentication.getName());
+        salon.setHost(loggedUser);
+        Member member = new Member();
+        member.setSalon(salon);
+        member.setUser(loggedUser);
+        memberService.create(member);
+        salonRepo.save(salon);
+        return getSalon(salon.getId());
     }
 
     @Override
@@ -181,7 +187,7 @@ public class SalonService implements ISalonService{
             throw new IllegalArgumentException("Not member found by id: "+idMember);
         }
         Member member = memberService.getMember(idMember);
-        if (member.getSalon().getId().equals(idMember)){
+        if (member.getSalon().getId().equals(salonId)){
             Task task = taskService.getTask(idTask);
             task.setAffectedMember(member);
             taskService.update(idTask,task);
@@ -189,5 +195,24 @@ public class SalonService implements ISalonService{
             throw new IllegalArgumentException("Member by id "+idMember+" is not allowed to get a task in this salon");
         }
         return this.getSalon(salonId);
+    }
+
+    @Override
+    public Salon addMessage(Long idSalon, Long idMember, Message message) {
+        if (!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        if (!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        Member member = memberService.getMember(idMember);
+        if (member.getSalon().getId().equals(idSalon)){
+            message.setMember(memberService.getMember(idMember));
+            messageService.create(message);
+            //memberService.update(idMember,member);
+        }else {
+            throw new IllegalArgumentException("Tu devrais arriver ici!");
+        }
+        return this.getSalon(idSalon);
     }
 }
