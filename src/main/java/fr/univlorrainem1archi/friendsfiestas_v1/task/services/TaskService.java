@@ -1,6 +1,9 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.task.services;
 
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.TaskDTO;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.TaskMapper;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.repository.TaskRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +18,12 @@ import java.util.List;
 public class TaskService implements ITaskService {
 
     private final TaskRepo taskRepository;
+    private final TaskMapper taskMapper;
 
     @Autowired
-    public TaskService(TaskRepo taskRepository) {
+    public TaskService(TaskRepo taskRepository, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
+        this.taskMapper = taskMapper;
     }
 
     @Override
@@ -54,6 +59,11 @@ public class TaskService implements ITaskService {
         }
         taskRepository.deleteById(id);
         return true;
+    }
+
+    public Task convert(RequestBodyTask task){
+        TaskDTO taskDTO = taskMapper.to(task);
+        return this.taskMapper.to(taskDTO);
     }
 
     public boolean existById(Long id) {

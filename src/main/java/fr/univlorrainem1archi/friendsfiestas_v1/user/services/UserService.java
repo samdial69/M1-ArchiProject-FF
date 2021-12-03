@@ -4,9 +4,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.EmailExistExc
 import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.UsernameExistException;
 import fr.univlorrainem1archi.friendsfiestas_v1.security.jwt.JwtTokenProvider;
 import fr.univlorrainem1archi.friendsfiestas_v1.security.jwt.SecurityConstant;
-import fr.univlorrainem1archi.friendsfiestas_v1.user.models.EnumRole;
-import fr.univlorrainem1archi.friendsfiestas_v1.user.models.Role;
-import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.models.*;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.repository.RoleRepo;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,12 +29,15 @@ public class UserService implements IUser{
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
+    private final UserMapper userMapper;
+
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepo roleRepo, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public UserService(UserRepository userRepository, RoleRepo roleRepo, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepo = roleRepo;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -53,25 +54,31 @@ public class UserService implements IUser{
     }
 
     @Override
-    public User register(User user) throws EmailExistException, UsernameExistException {
+    public User register(RequestBodyUser user) throws EmailExistException, UsernameExistException {
         Role role = new Role(null, EnumRole.ROLE_USER);
         roleRepo.save(role);
         validateUsernameAndEmail(StringUtils.EMPTY,user.getPseudo(),user.getEmail());
         String encodePassword = encodePassword(user.getPassword());
 
-        user.setPassword(encodePassword);
-        user.setRoles(List.of(role));
-        userRepository.save(user);
+        User userConvert = this.convert(user);
+        userConvert.setPassword(encodePassword);
+        userConvert.setRoles(List.of(role));
+        userRepository.save(userConvert);
         log.info("User register by pseudo {}",user.getPseudo());
-        return user;
+        return userConvert;
 
+    }
+
+    private User convert(RequestBodyUser user) {
+        UserDTO userDTO = userMapper.to(user);
+        return this.userMapper.to(userDTO);
     }
 
     private String encodePassword(String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
 
-    public List<Object> login(User user) {
+    public List<Object> login(RequestBodyUser user) {
         authenticate(user.getPseudo(),user.getPassword());
          User loginUser = this.findUserByPseudo(user.getPseudo());
         if (loginUser == null){

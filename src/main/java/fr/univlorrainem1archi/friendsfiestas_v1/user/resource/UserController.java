@@ -5,6 +5,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
 import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.EmailExistException;
 import fr.univlorrainem1archi.friendsfiestas_v1.security.exception.UsernameExistException;
 import fr.univlorrainem1archi.friendsfiestas_v1.security.jwt.JwtTokenProvider;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.models.RequestBodyUser;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Response> registration(@RequestBody User user) throws EmailExistException, UsernameExistException {
+    public ResponseEntity<Response> registration(@RequestBody RequestBodyUser user) throws EmailExistException, UsernameExistException {
         return new ResponseBuilder(HttpStatus.CREATED,"User registrated successfully!","user",userService.register(user)).buildResponse();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody User user){
+    public ResponseEntity<Response> login(@RequestBody RequestBodyUser user){
         return new ResponseBuilder(HttpStatus.OK,"User logged successfully!","user",userService.login(user)).buildResponse();
     }
 
