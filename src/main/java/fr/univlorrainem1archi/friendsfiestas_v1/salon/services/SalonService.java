@@ -152,16 +152,22 @@ public class SalonService implements ISalonService{
         if(!existById(idSalon)){
             throw new IllegalArgumentException("Not salon found by id: "+idSalon);
         }
-        /*if(!memberService.existById(idSalon)){
-            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
-        }*/
+        if(!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
         if(!taskService.existById(idTask)){
             throw new IllegalArgumentException("Not task found by id: "+idTask);
         }
         Task task = taskService.getTask(idTask);
         if(task.getSalon().getId().equals(idSalon)) {
-            task.setDone(true);
-            taskService.update(idTask, task);
+            if(task.getAffectedMember().getId().equals(idMember))
+            {
+                task.setDone(true);
+                taskService.update(idTask, task);
+            }
+            else {
+                throw new IllegalArgumentException("Member by id "+ idMember + " is not affected to this task");
+            }
         }
         else {
             throw new IllegalArgumentException("Task by id " + idTask + " is not in this salon");
@@ -181,7 +187,7 @@ public class SalonService implements ISalonService{
             throw new IllegalArgumentException("Not member found by id: "+idMember);
         }
         Member member = memberService.getMember(idMember);
-        if (member.getSalon().getId().equals(idMember)){
+        if (member.getSalon().getId().equals(salonId)){
             Task task = taskService.getTask(idTask);
             task.setAffectedMember(member);
             taskService.update(idTask,task);

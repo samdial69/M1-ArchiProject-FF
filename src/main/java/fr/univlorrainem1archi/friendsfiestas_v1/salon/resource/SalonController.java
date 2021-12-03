@@ -79,9 +79,9 @@ public class SalonController {
                 salonService.addMemberToSalon(idSalon,idUser)).buildResponse();
     }
 
-    @PutMapping("/{idSalon}/member/{idMember}valider-tache/{idTask}")
+    @PutMapping("/{idSalon}/membre/{idMember}/valider-tache/{idTask}")
     public ResponseEntity<Response> validateTask(@PathVariable("idSalon") Long idSalon, @PathVariable("idMember") Long idMember, @PathVariable("idTask") Long idTask){
-        return new ResponseBuilder(OK, "Tâche validée avec succès", "salon",
+        return new ResponseBuilder(OK, "Task validated successfully", "salon",
                 salonService.validateTask(idSalon, idMember, idTask)).buildResponse();
     }
 
