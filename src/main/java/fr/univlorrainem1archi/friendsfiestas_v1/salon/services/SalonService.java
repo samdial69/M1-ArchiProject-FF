@@ -11,6 +11,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.SalonDTO;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.SalonMapper;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.repository.SalonRepo;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
@@ -115,13 +116,15 @@ public class SalonService implements ISalonService{
 //    }
 
     @Override
-    public Salon addTask(Long salonId, Task task) {
+    public Salon addTask(Long salonId, RequestBodyTask task) {
         if(!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
         Salon salon = getSalon(salonId);
-        task.setSalon(salon);
-        taskService.create(task);
+
+        Task taskConvert = this.taskService.convert(task);
+        taskConvert.setSalon(salon);
+        this.taskService.create(taskConvert);
         return salon;
     }
 

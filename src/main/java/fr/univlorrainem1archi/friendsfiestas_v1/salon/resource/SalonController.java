@@ -6,6 +6,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +36,14 @@ public class SalonController {
     }
 
     @PostMapping("/ajouter")
-    public ResponseEntity<Response> create(@RequestBody RequestBodySalon salon){
+    public ResponseEntity<Response> create(@RequestBody Salon salon){
         return new ResponseBuilder(CREATED,"Created successfully","salon",salonService.create(salon)).buildResponse();
     }
 
     @PutMapping("/modifier/{id}")
     public ResponseEntity<Response> update(@PathVariable("id") Long id, @RequestBody RequestBodySalon salon){
+    public ResponseEntity<Response> update(@PathVariable("id") Long id,
+                                           @RequestBody Salon salon){
         return new ResponseBuilder(OK,"Updated successfully","salon",salonService.update(id,salon)).buildResponse();
     }
 
@@ -62,25 +65,31 @@ public class SalonController {
 
     @PostMapping("/{idSalon}/ajouter-adresse")
     public ResponseEntity<Response> addAddress(@PathVariable("idSalon") Long idSalon,@RequestBody RequestBodyAddress address){
+    public ResponseEntity<Response> addAddress(@PathVariable("idSalon") Long idSalon,
+                                               @RequestBody Address address){
         return new ResponseBuilder(OK,"Adding successfully an address to the salon",
                 "salon",
                 salonService.saveOrUpdateAddressInSalon(idSalon,null,address)).buildResponse();
     }
 
     @PostMapping(value = "/{idSalon}/ajouter-tache")
-    public ResponseEntity<Response> addTask(@PathVariable("idSalon") Long idSalon, @RequestBody Task task){
+    public ResponseEntity<Response> addTask(@PathVariable("idSalon") Long idSalon,
+                                            @RequestBody RequestBodyTask task){
         return new ResponseBuilder(OK,"Adding a task to a salon successfully!","salon",
                 salonService.addTask(idSalon,task)).buildResponse();
     }
 
     @GetMapping("/{idSalon}/ajouter-membre/{idUser}")
-    public ResponseEntity<Response> addMembreToSalon(@PathVariable("idSalon") Long idSalon,@PathVariable("idUser") Long idUser){
+    public ResponseEntity<Response> addMembreToSalon(@PathVariable("idSalon") Long idSalon,
+                                                     @PathVariable("idUser") Long idUser){
         return new ResponseBuilder(OK,"Adding user to a salon : become member","salon",
                 salonService.addMemberToSalon(idSalon,idUser)).buildResponse();
     }
 
     @PutMapping("/{idSalon}/membre/{idMember}/valider-tache/{idTask}")
-    public ResponseEntity<Response> validateTask(@PathVariable("idSalon") Long idSalon, @PathVariable("idMember") Long idMember, @PathVariable("idTask") Long idTask){
+    public ResponseEntity<Response> validateTask(@PathVariable("idSalon") Long idSalon,
+                                                 @PathVariable("idMember") Long idMember,
+                                                 @PathVariable("idTask") Long idTask){
         return new ResponseBuilder(OK, "Task validated successfully", "salon",
                 salonService.validateTask(idSalon, idMember, idTask)).buildResponse();
     }
