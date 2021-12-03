@@ -85,6 +85,15 @@ public class SalonController {
                 salonService.validateTask(idSalon, idMember, idTask)).buildResponse();
     }
 
+    @GetMapping("/{idSalon}/taches/{idTask}/membre/{idMember}")
+    public ResponseEntity<Response> affectMemberToTask(@PathVariable("idSalon") Long salonId,
+                                                       @PathVariable("idTask") Long idTask,
+                                                       @PathVariable("idMember") Long idMember){
+        return new ResponseBuilder(OK,"Task affected successfully to a member!",
+                "salon",
+                salonService.affectMemberToTask(salonId,idTask,idMember)).buildResponse();
+    }
+
 //    @PostMapping("/{idSalon}/ajouter-message")
 //    public ResponseEntity<Response> addMessage(@PathVariable("idSalon") Long idSalon, @RequestBody Message message)
 //    {

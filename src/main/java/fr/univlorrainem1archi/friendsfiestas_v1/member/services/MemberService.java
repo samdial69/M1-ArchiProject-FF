@@ -20,4 +20,12 @@ public class MemberService {
     public Member create(Member member){
         return memberRepo.save(member);
     }
+
+    public boolean existById(Long idMember) {
+        return memberRepo.existsById(idMember);
+    }
+
+    public Member getMember(Long idMember) {
+        return memberRepo.findById(idMember).orElseThrow();
+    }
 }
