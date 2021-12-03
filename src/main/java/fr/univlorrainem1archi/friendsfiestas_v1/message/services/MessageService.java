@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -18,6 +17,11 @@ public class MessageService implements IMessage{
     @Autowired
     public MessageService(MessageRepo messageRepo) {
         this.messageRepo = messageRepo;
+    }
+
+    public Message create(Message message) {
+        log.info("Creating a message");
+        return messageRepo.save(message);
     }
 
 //    @Override

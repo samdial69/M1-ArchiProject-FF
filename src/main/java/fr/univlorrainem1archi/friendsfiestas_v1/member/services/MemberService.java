@@ -28,4 +28,13 @@ public class MemberService {
     public Member getMember(Long idMember) {
         return memberRepo.findById(idMember).orElseThrow();
     }
+
+    public Member update(Long idMember, Member member) {
+        if (!existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        log.info("Update the member id: {}", member.getId());
+        member.setId(idMember);
+        return memberRepo.save(member);
+    }
 }

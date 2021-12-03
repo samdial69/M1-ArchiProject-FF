@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.Address;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class Salon {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address addressEvent;
+
+    @OneToOne
+    private User host;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "salon")
     @JsonManagedReference
