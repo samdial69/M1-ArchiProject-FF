@@ -13,6 +13,8 @@ import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -60,6 +62,8 @@ public class SalonService implements ISalonService{
     @Override
     public Salon create(Salon salon) {
         log.info("Creating a salon : "+salon.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         //TODO set le host à partir de là quand on implementera Spring-security
         return salonRepo.save(salon);
     }
@@ -142,5 +146,27 @@ public class SalonService implements ISalonService{
 
         memberService.create(member);
         return salon;
+    }
+
+    @Override
+    public Salon affectMemberToTask(Long salonId, Long idTask, Long idMember) {
+        if (!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        if (!taskService.existById(idTask)){
+            throw new IllegalArgumentException("Not task found by id: "+idTask);
+        }
+        if (!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        Member member = memberService.getMember(idMember);
+        if (member.getSalon().getId().equals(idMember)){
+            Task task = taskService.getTask(idTask);
+            task.setAffectedMember(member);
+            taskService.update(idTask,task);
+        }else {
+            throw new IllegalArgumentException("Member by id "+idMember+" is not allowed to get a task in this salon");
+        }
+        return this.getSalon(salonId);
     }
 }
