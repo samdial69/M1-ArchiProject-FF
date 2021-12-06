@@ -52,6 +52,10 @@ public class SalonService implements ISalonService{
         this.memberService = memberService;
     }
 
+    public boolean existById(Long id){
+        return salonRepo.existsById(id);
+    }
+
     @Override
     public List<Salon> getSalons() {
         log.info("Retrieving all salons");
@@ -110,24 +114,6 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public List<Member> getMembers(Long salonId) {
-        return memberService.getMembersBySalonId(salonId);
-    }
-
-    @Override
-    public Salon addTask(Long salonId, RequestBodyTask task) {
-        if(!existById(salonId)){
-            throw new IllegalArgumentException("Not salon found by id: "+salonId);
-        }
-        Salon salon = getSalon(salonId);
-
-        Task taskConvert = this.taskService.convert(task);
-        taskConvert.setSalon(salon);
-        this.taskService.create(taskService.convertTo(taskConvert));
-        return salon;
-    }
-
-    @Override
     public Salon saveOrUpdateAddressInSalon(Long salonId, Long addressId, RequestBodyAddress address){
         if(!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
@@ -144,10 +130,12 @@ public class SalonService implements ISalonService{
         return salon;
     }
 
-    public boolean existById(Long id){
-        return salonRepo.existsById(id);
+    @Override
+    public List<Member> getMembers(Long salonId) {
+        return memberService.getMembersBySalonId(salonId);
     }
 
+    @Override
     public Salon addMemberToSalon(Long idSalon, Long idUser) {
         if (!existById(idSalon)){
             throw new IllegalArgumentException("Not salon found by id: "+idSalon);
@@ -166,6 +154,84 @@ public class SalonService implements ISalonService{
         return salon;
     }
 
+    @Override
+    public Salon deleteMember(Long idSalon, Long idMember) {
+        if(!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        Salon salon = this.getSalon(idSalon);
+        if(!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        Member member = memberService.getMember(idMember);
+        if(member.getSalon().getId().equals(idSalon)){
+            memberService.delete(idMember);
+            salonRepo.save(salon);
+        }
+        return salon;
+    }
+
+    @Override
+    public Salon addTask(Long salonId, RequestBodyTask task) {
+        if(!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        Salon salon = getSalon(salonId);
+
+        Task taskConvert = this.taskService.convert(task);
+        taskConvert.setSalon(salon);
+        this.taskService.create(taskConvert);
+        return salon;
+    }
+
+    @Override
+    public Salon affectMemberToTask(Long salonId, Long idTask, Long idMember) {
+        if (!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        Salon salon = this.getSalon(salonId);
+        if (!taskService.existById(idTask)){
+            throw new IllegalArgumentException("Not task found by id: "+idTask);
+        }
+        Task task = taskService.getTask(idTask);
+        if (!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        Member member = memberService.getMember(idMember);
+        if (member.getSalon().getId().equals(salonId) && task.getSalon().getId().equals(salonId)){
+            task.setAffectedMember(member);
+            taskService.update(idTask, task);
+        }
+        else {
+            throw new IllegalArgumentException("Member by id "+idMember+" is not allowed to get a task in this salon");
+        }
+        return salon;
+    }
+
+    @Override
+    public Salon updateTask(Long idSalon, Long idTask, Task taskBody) {
+        if(!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        Salon salon = this.getSalon(idSalon);
+        if(!taskService.existById(idTask)){
+            throw new IllegalArgumentException("Not task found by id: "+idTask);
+        }
+        Task task = taskService.getTask(idTask);
+        if (task.getSalon().getId().equals(idSalon)){
+            if(task.isDone()){
+                throw new IllegalArgumentException("Task already done : "+idTask);
+            }
+            else {
+                task.setDescription(taskBody.getDescription());
+                taskService.update(idTask, task);
+            }
+
+        }
+        return salon;
+    }
+
+    @Override
     public Salon validateTask(Long idSalon, Long idMember, Long idTask) {
         if(!existById(idSalon)){
             throw new IllegalArgumentException("Not salon found by id: "+idSalon);
@@ -181,7 +247,7 @@ public class SalonService implements ISalonService{
             if(task.getAffectedMember().getId().equals(idMember))
             {
                 task.setDone(true);
-                taskService.update(idTask, taskService.convertTo(task));
+                taskService.update(idTask, task);
             }
             else {
                 throw new IllegalArgumentException("Member by id "+ idMember + " is not affected to this task");
@@ -194,25 +260,20 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public Salon affectMemberToTask(Long salonId, Long idTask, Long idMember) {
-        if (!existById(salonId)){
-            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+    public Salon deleteTask(Long idSalon, Long idTask) {
+        if(!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
         }
-        if (!taskService.existById(idTask)){
+        Salon salon = this.getSalon(idSalon);
+        if(!taskService.existById(idTask)){
             throw new IllegalArgumentException("Not task found by id: "+idTask);
         }
-        if (!memberService.existById(idMember)){
-            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        Task task = taskService.getTask(idTask);
+        if (task.getSalon().getId().equals(idSalon)){
+            taskService.delete(idTask);
+            salonRepo.save(salon);
         }
-        Member member = memberService.getMember(idMember);
-        if (member.getSalon().getId().equals(salonId)){
-            Task task = taskService.getTask(idTask);
-            task.setAffectedMember(member);
-            taskService.update(idTask,taskService.convertTo(task));
-        }else {
-            throw new IllegalArgumentException("Member by id "+idMember+" is not allowed to get a task in this salon");
-        }
-        return this.getSalon(salonId);
+        return salon;
     }
 
     @Override

@@ -57,6 +57,13 @@ public class AddressService implements IAddressService{
         return addressRepo.save(this.addressMapper.to(addressDTO));
     }
 
+    /*public Address update2(Long id, RequestBodyAddress address){
+        log.info("Update an address {}",address.getCompleteAddress());
+        AddressDTO addressDTO = addressMapper.to(address);
+        addressDTO.setId(id);
+        return addressRepo.fl
+    }*/
+
     @Override
     public boolean delete(Long id) {
         log.info("Deleting address by id {}:", id);

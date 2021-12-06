@@ -20,7 +20,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public ResponseEntity<Response> getTasks(){
         return new ResponseBuilder(HttpStatus.OK,"Retrieving all tasks","tasks",taskService.getTasks()).buildResponse();
     }
@@ -49,5 +49,5 @@ public class TaskController {
             return (ResponseEntity<Response>) ResponseEntity.notFound();
         }
             return new ResponseBuilder(HttpStatus.OK,"Deleted successfully!","isDeleted",taskService.delete(id)).buildResponse();
-    }
+    }*/
 }

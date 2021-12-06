@@ -33,4 +33,8 @@ public class Member {
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "member")
     @JsonManagedReference
     private List<Message> messages;
+
+    public String toString(){
+        return this.getUser().toString();
+    }
 }

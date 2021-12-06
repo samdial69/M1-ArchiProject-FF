@@ -8,6 +8,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 

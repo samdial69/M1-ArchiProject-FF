@@ -42,4 +42,13 @@ public class MemberService {
         member.setId(idMember);
         return memberRepo.save(member);
     }
+
+    public boolean delete(Long id) {
+        log.info("Deleting member by id {}:", id);
+        if (!existById(id)) {
+            throw new IllegalArgumentException("No member found by id:" + id);
+        }
+        memberRepo.deleteById(id);
+        return true;
+    }
 }

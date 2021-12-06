@@ -1,5 +1,6 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.task.services;
 
+import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.TaskDTO;
@@ -39,18 +40,20 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task create(RequestBodyTask task) {
+    public Task create(Task task) {
         log.info("Saving new task :{}", task.getDescription());
         TaskDTO taskDTO = taskMapper.to(task);
         return taskRepository.save(this.taskMapper.to(taskDTO));
     }
 
     @Override
-    public Task update(Long id, RequestBodyTask task) {
-        TaskDTO taskDTO = taskMapper.to(task);
-        log.info("Update the task id: {}", taskDTO.getId());
-        taskDTO.setId(id);
-        return taskRepository.save(this.taskMapper.to(taskDTO));
+    public Task update(Long id, Task task) {
+        log.info("Update the task id: {}", id);
+        if (!existById(id)){
+            throw new IllegalArgumentException("Not task found by id "+id);
+        }
+        //currentTask.setDescription(task.getDescription());
+        return taskRepository.save(task);
     }
 
     @Override
