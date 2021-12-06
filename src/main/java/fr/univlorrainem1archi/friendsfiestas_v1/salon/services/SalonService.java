@@ -124,7 +124,7 @@ public class SalonService implements ISalonService{
 
         Task taskConvert = this.taskService.convert(task);
         taskConvert.setSalon(salon);
-        this.taskService.create(taskConvert);
+        this.taskService.create(taskService.convertTo(taskConvert));
         return salon;
     }
 
@@ -182,7 +182,7 @@ public class SalonService implements ISalonService{
             if(task.getAffectedMember().getId().equals(idMember))
             {
                 task.setDone(true);
-                taskService.update(idTask, task);
+                taskService.update(idTask, taskService.convertTo(task));
             }
             else {
                 throw new IllegalArgumentException("Member by id "+ idMember + " is not affected to this task");
@@ -209,7 +209,7 @@ public class SalonService implements ISalonService{
         if (member.getSalon().getId().equals(salonId)){
             Task task = taskService.getTask(idTask);
             task.setAffectedMember(member);
-            taskService.update(idTask,task);
+            taskService.update(idTask,taskService.convertTo(task));
         }else {
             throw new IllegalArgumentException("Member by id "+idMember+" is not allowed to get a task in this salon");
         }

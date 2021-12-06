@@ -39,16 +39,18 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task create(Task task) {
+    public Task create(RequestBodyTask task) {
         log.info("Saving new task :{}", task.getDescription());
-        return taskRepository.save(task);
+        TaskDTO taskDTO = taskMapper.to(task);
+        return taskRepository.save(this.taskMapper.to(taskDTO));
     }
 
     @Override
-    public Task update(Long id, Task task) {
-        log.info("Update the task id: {}", task.getId());
-        task.setId(id);
-        return taskRepository.save(task);
+    public Task update(Long id, RequestBodyTask task) {
+        TaskDTO taskDTO = taskMapper.to(task);
+        log.info("Update the task id: {}", taskDTO.getId());
+        taskDTO.setId(id);
+        return taskRepository.save(this.taskMapper.to(taskDTO));
     }
 
     @Override
@@ -64,6 +66,12 @@ public class TaskService implements ITaskService {
     public Task convert(RequestBodyTask task){
         TaskDTO taskDTO = taskMapper.to(task);
         return this.taskMapper.to(taskDTO);
+    }
+
+    public RequestBodyTask convertTo(Task task){
+        RequestBodyTask taskBody = new RequestBodyTask();
+        taskBody.setDescription(task.getDescription());
+        return taskBody;
     }
 
     public boolean existById(Long id) {

@@ -2,7 +2,7 @@ package fr.univlorrainem1archi.friendsfiestas_v1.task.resource;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
-import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
+import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,12 +31,12 @@ public class TaskController {
     }
 
     @PostMapping("/ajouter")
-    public ResponseEntity<Response> create(@RequestBody Task task){
+    public ResponseEntity<Response> create(@RequestBody RequestBodyTask task){
         return new ResponseBuilder(HttpStatus.OK,"Created successfully!","task",taskService.create(task)).buildResponse();
     }
 
     @PutMapping("/modifier/{id}")
-    public ResponseEntity<Response> update(@PathVariable Long id,@RequestBody Task task){
+    public ResponseEntity<Response> update(@PathVariable Long id,@RequestBody RequestBodyTask task){
         if (!taskService.existById(id)){
             return (ResponseEntity<Response>) ResponseEntity.notFound();
         }
