@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,6 +28,10 @@ public class MemberService {
 
     public Member getMember(Long idMember) {
         return memberRepo.findById(idMember).orElseThrow();
+    }
+
+    public List<Member> getMembersBySalonId(Long salonId){
+        return memberRepo.findMembersBySalon(salonId);
     }
 
     public Member update(Long idMember, Member member) {

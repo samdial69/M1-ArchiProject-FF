@@ -59,6 +59,11 @@ public class SalonService implements ISalonService{
     }
 
     @Override
+    public List<Salon> getSalonsByHostId(Long id) {
+        return salonRepo.findSalonByHost_Id(id);
+    }
+
+    @Override
     public Salon getSalon(Long id) {
         if (!existById(id)){
             throw new IllegalArgumentException("Not salon found by id: "+id);
@@ -104,16 +109,10 @@ public class SalonService implements ISalonService{
         return true;
     }
 
-//    @Override
-//    public Salon addMessage(Long salonId, Message message) {
-//        if(!existById(salonId)){
-//            throw new IllegalArgumentException("Not salon found by id: "+salonId);
-//        }
-//        Salon salon = getSalon(salonId);
-//        message.setSalon(salon);
-//        messageService.create(message);
-//        return salonRepo.save(salon);
-//    }
+    @Override
+    public List<Member> getMembers(Long salonId) {
+        return memberService.getMembersBySalonId(salonId);
+    }
 
     @Override
     public Salon addTask(Long salonId, RequestBodyTask task) {

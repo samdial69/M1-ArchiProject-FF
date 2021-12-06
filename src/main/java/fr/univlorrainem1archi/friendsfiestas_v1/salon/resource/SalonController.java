@@ -107,4 +107,9 @@ public class SalonController {
                 salonService.addMessage(idSalon,idMember,message)).buildResponse();
     }
 
+    @GetMapping("/{idSalon}/membres")
+    public ResponseEntity<Response> getMembersBySalon(@PathVariable("salonId") Long salonId){
+        return new ResponseBuilder(OK,"Retrieve members of salon id"+salonId,"salon",salonService.getMembers(salonId)).buildResponse();
+    }
+
 }
