@@ -135,6 +135,10 @@ public class SalonService implements ISalonService{
         return memberService.getMembersBySalonId(salonId);
     }
 
+    public List<Salon> getSalonByHost(Long hostId){
+        return salonRepo.findSalonByHost_Id(hostId);
+    }
+
     @Override
     public Salon addMemberToSalon(Long idSalon, Long idUser) {
         if (!existById(idSalon)){

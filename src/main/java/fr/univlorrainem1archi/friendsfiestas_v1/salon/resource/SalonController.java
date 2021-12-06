@@ -9,9 +9,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -50,6 +48,10 @@ public class SalonController {
     @DeleteMapping("/supprimer/{id}")
     public ResponseEntity<Response> delete(@PathVariable("id") Long id){
         return new ResponseBuilder(OK,"Deleted successfully!","isDeleted",salonService.delete(id)).buildResponse();
+    }
+    @GetMapping("/mes-salons/{idHost}")
+    public ResponseEntity<Response> getSalonsByHost(@PathVariable("idHost") Long idHost){
+        return new ResponseBuilder(OK,"Retrieving salons by host id: "+idHost,"salons",salonService.getSalonByHost(idHost)).buildResponse();
     }
 
     @PostMapping("/{idSalon}/ajouter-adresse")
