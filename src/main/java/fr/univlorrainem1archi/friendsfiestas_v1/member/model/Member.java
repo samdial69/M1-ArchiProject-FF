@@ -2,6 +2,7 @@ package fr.univlorrainem1archi.friendsfiestas_v1.member.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.univlorrainem1archi.friendsfiestas_v1.constantes.Presence;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
@@ -28,7 +29,7 @@ public class Member {
     @JsonBackReference
     private Salon salon;
 
-    private String presence;
+    private Presence presence;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "member")
     @JsonManagedReference

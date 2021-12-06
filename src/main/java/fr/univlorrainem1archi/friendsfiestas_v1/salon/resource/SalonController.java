@@ -3,13 +3,16 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.resource;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
+import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -104,6 +107,13 @@ public class SalonController {
     @GetMapping("/{idSalon}/membres")
     public ResponseEntity<Response> getMembersBySalon(@PathVariable("salonId") Long salonId){
         return new ResponseBuilder(OK,"Retrieve members of salon id"+salonId,"salon",salonService.getMembers(salonId)).buildResponse();
+    }
+
+    @PutMapping("{idSalon}/presence-membre/{idMember}")
+    public ResponseEntity<Response> setPresenceMember(@PathVariable("idSalon") Long idSalon,
+                                                      @PathVariable("idMember") Long idMember,
+                                                      @RequestBody Member member){
+        return new ResponseBuilder(OK, "Member presence is update", "salon", salonService.setPresenceMember(idSalon, idMember, member)).buildResponse();
     }
 
     @DeleteMapping("/{idSalon}/supprimer-membre/{idMember}")

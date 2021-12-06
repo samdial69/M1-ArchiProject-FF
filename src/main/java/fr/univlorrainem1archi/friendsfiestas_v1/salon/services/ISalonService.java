@@ -23,6 +23,7 @@ public interface ISalonService {
     Salon addMemberToSalon(Long idSalon,Long idUser);
     Salon affectMemberToTask(Long salonId, Long idTask, Long idMember);
     List<Member> getMembers(Long salonId);
+    Salon setPresenceMember(Long idSalon, Long idMember, Member member);
     Salon deleteMember(Long idSalon, Long idMember);
 
     Salon addTask(Long salonId, RequestBodyTask task);

@@ -2,6 +2,7 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.service.AddressService;
+import fr.univlorrainem1archi.friendsfiestas_v1.constantes.Presence;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.services.MemberService;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
@@ -159,6 +160,26 @@ public class SalonService implements ISalonService{
     }
 
     @Override
+    public Salon setPresenceMember(Long idSalon, Long idMember, Member member) {
+        if (!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+        if(!memberService.existById(idMember)){
+            throw new IllegalArgumentException("Not member found by id: "+idMember);
+        }
+        Member currentMember = memberService.getMember(idMember);
+        if(currentMember.getSalon().getId().equals(idSalon))
+        {
+            currentMember.setPresence(member.getPresence());
+            memberService.update(idMember, currentMember);
+            if(member.getPresence() == Presence.NON){
+                memberService.delete(idMember);
+            }
+        }
+        return this.getSalon(idSalon);
+    }
+
+    @Override
     public Salon deleteMember(Long idSalon, Long idMember) {
         if(!existById(idSalon)){
             throw new IllegalArgumentException("Not salon found by id: "+idSalon);
@@ -303,4 +324,5 @@ public class SalonService implements ISalonService{
         SalonDTO salonDTO = this.salonMapper.to(salon);
         return this.salonMapper.to(salonDTO);
     }
+
 }
