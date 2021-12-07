@@ -141,13 +141,16 @@ public class SalonService implements ISalonService{
         return memberService.getMembersBySalonId(salon);
     }
 
-    public List<List<Message>> getMessagesBySalon(Long salonId){
+    public List<List<Member>> getMessagesBySalon(Long salonId){
         if (!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
-        return getMembers(salonId).stream()
-                .map(Member::getMessages)
-                .collect(Collectors.toList());
+       return getMembers(salonId).stream()
+               .map(member -> member.getMessages()
+                       .stream()
+                       .map(Message::getMember)
+                       .collect(Collectors.toList())
+               ).collect(Collectors.toList());
     }
 
     public List<Salon> getSalonByHost(Long hostId){
