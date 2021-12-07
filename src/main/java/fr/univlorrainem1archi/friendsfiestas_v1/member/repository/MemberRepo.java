@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface MemberRepo extends JpaRepository<Member,Long> {
     List<Member> findMembersBySalon(Salon salon);
+    List<Member> findMembersByUserId(Long userId);
 }

@@ -153,6 +153,12 @@ public class SalonController {
                 salonService.addMessage(idSalon,idMember,message)).buildResponse();
     }
 
+    @GetMapping("{userId}/tous-les-salons")
+    public ResponseEntity<Response> getSalonsByMembers(@PathVariable("userId") Long userId){
+        return new ResponseBuilder(OK,"Retrieving all salons where am member by id "+userId,"salons",
+                salonService.getSalonsByMembers(userId)).buildResponse();
+    }
+
     //////////Test
     @GetMapping("/{idSalon}/voir-messages")
     public ResponseEntity<Response> getmessages(@PathVariable("idSalon") Long idSalon){

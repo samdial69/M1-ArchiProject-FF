@@ -142,19 +142,15 @@ public class SalonService implements ISalonService{
         return memberService.getMembersBySalonId(salon);
     }
 
-    public List<List<? extends List<?>>> getMessagesBySalon(Long salonId){
-        if (!existById(salonId)){
-            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+    @Override
+    public List<Salon> getSalonsByMembers(Long userId) {
+        if (!userService.existById(userId)){
+            throw new IllegalArgumentException("Not user found by id "+userId);
         }
-return null;
-//        return getMembers(salonId).stream()
-//                .map(member -> member.getMessages()
-//                        .stream()
-//                        .map(Message::)
-//                        .collect(Collectors.toList())
-//                ).collect(Collectors.toList());
+        return memberService.getSalonsByMembers(userId);
     }
 
+    @Override
     public List<Map<?, ?>> getMessages(Long salonId){
         if (!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);

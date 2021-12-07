@@ -9,6 +9,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ISalonService {
     List<Salon> getSalons();
@@ -17,6 +18,7 @@ public interface ISalonService {
     Salon update(Long id,RequestBodySalon salon);
     boolean delete(Long id);
     List<Salon> getSalonsByHostId(Long id);
+    List<Salon> getSalonsByMembers(Long userId);
 
     Salon saveOrUpdateAddressInSalon(Long salonId,Long addressId, RequestBodyAddress address);
 
@@ -32,4 +34,5 @@ public interface ISalonService {
     Salon deleteTask(Long idSalon, Long idTask);
 
     Salon addMessage(Long idSalon, Long idMember, Message message);
+    List<Map<?, ?>> getMessages(Long salonId);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,6 +34,12 @@ public class MemberService {
 
     public List<Member> getMembersBySalonId(Salon salon){
         return memberRepo.findMembersBySalon(salon);
+    }
+
+    public List<Salon> getSalonsByMembers(Long userId){
+        return memberRepo.findMembersByUserId(userId).
+                stream().map(Member::getSalon)
+                .collect(Collectors.toList());
     }
 
     public Member update(Long idMember, Member member) {
