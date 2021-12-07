@@ -54,6 +54,10 @@ public class UserService implements IUser{
     }
 
     @Override
+    public List<User> getUsersPseudoContains(String pseudo){
+        return userRepository.findUsersByPseudoContains(pseudo);
+    }
+    @Override
     public User register(RequestBodyUser user) throws EmailExistException, UsernameExistException {
         Role role = new Role(null, EnumRole.ROLE_USER);
         roleRepo.save(role);

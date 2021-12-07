@@ -18,6 +18,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.task.services.TaskService;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 import fr.univlorrainem1archi.friendsfiestas_v1.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -150,6 +151,10 @@ public class SalonService implements ISalonService{
         return memberService.getSalonsByMembers(userId);
     }
 
+    public List<Salon> getSalonByHost(Long hostId){
+        return salonRepo.findSalonByHost_Id(hostId);
+    }
+
     @Override
     public List<Map<?, ?>> getMessages(Long salonId){
         if (!existById(salonId)){
@@ -164,8 +169,13 @@ public class SalonService implements ISalonService{
                     "sendAt",message.getSendAt());
         }).collect(Collectors.toList());
     }
-    public List<Salon> getSalonByHost(Long hostId){
-        return salonRepo.findSalonByHost_Id(hostId);
+
+    @Override
+    public List<User> getUserPseudoContains(String pseudo) {
+        if (!StringUtils.isNotEmpty(pseudo)){
+            throw new IllegalArgumentException("This field can not be empty: "+pseudo);
+        }
+        return userService.getUsersPseudoContains(pseudo);
     }
 
     @Override

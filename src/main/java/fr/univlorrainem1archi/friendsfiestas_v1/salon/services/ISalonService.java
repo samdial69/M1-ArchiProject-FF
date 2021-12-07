@@ -7,6 +7,7 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
+import fr.univlorrainem1archi.friendsfiestas_v1.user.models.User;
 
 import java.util.List;
 import java.util.Map;
@@ -35,4 +36,6 @@ public interface ISalonService {
 
     Salon addMessage(Long idSalon, Long idMember, Message message);
     List<Map<?, ?>> getMessages(Long salonId);
+
+    List<User> getUserPseudoContains(String pseudo);
 }

@@ -165,4 +165,10 @@ public class SalonController {
         return new ResponseBuilder(OK,"Retrieving all messages","messages",salonService.getMessages(idSalon)).buildResponse();
     }
 
+    @PostMapping("/recherche-utilisateurs")
+    public ResponseEntity<Response> getUserPseudoContains(@RequestBody String pseudo){
+        return new ResponseBuilder(OK,"Searching user by pseudo contains: "+pseudo,"users",
+                salonService.getUserPseudoContains(pseudo)).buildResponse();
+    }
+
 }
