@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -133,7 +134,20 @@ public class SalonService implements ISalonService{
 
     @Override
     public List<Member> getMembers(Long salonId) {
-        return memberService.getMembersBySalonId(salonId);
+        if (!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        Salon salon = this.getSalon(salonId);
+        return memberService.getMembersBySalonId(salon);
+    }
+
+    public List<List<Message>> getMessagesBySalon(Long salonId){
+        if (!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        return getMembers(salonId).stream()
+                .map(Member::getMessages)
+                .collect(Collectors.toList());
     }
 
     public List<Salon> getSalonByHost(Long hostId){
