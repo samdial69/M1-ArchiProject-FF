@@ -1,6 +1,7 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.task.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 
@@ -12,5 +13,5 @@ public interface ITaskService {
     Task create(Task task);
     Task update(Long id, Task task);
     boolean delete(Long id);
-
+    List<Task> getTasksBySalon(Salon salon);
 }

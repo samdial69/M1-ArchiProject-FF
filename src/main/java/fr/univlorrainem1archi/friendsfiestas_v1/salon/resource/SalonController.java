@@ -90,6 +90,12 @@ public class SalonController {
                 salonService.updateTask(idSalon, idTask, task)).buildResponse();
     }
 
+    @GetMapping("/{idSalon}/voir-taches")
+    public ResponseEntity<Response> getTasksBySalon(@PathVariable("idSalon") Long idSalon){
+        return new ResponseBuilder(OK, "Retrieving all tasks from salon", "task",
+                salonService.getTasksBySalon(idSalon)).buildResponse();
+    }
+
     @DeleteMapping("/{idSalon}/supprimer-tache/{idTask}")
     public ResponseEntity<Response> deleteTask(@PathVariable("idSalon") Long idSalon,
                                                @PathVariable("idTask") Long idTask){

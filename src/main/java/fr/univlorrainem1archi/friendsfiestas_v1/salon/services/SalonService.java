@@ -325,4 +325,11 @@ public class SalonService implements ISalonService{
         return this.salonMapper.to(salonDTO);
     }
 
+    public List<Task> getTasksBySalon(Long idSalon) {
+        if (!existById(idSalon)){
+            throw new IllegalArgumentException("Not salon found by id: "+idSalon);
+        }
+            Salon salon = this.getSalon(idSalon);
+            return taskService.getTasksBySalon(salon);
+    }
 }

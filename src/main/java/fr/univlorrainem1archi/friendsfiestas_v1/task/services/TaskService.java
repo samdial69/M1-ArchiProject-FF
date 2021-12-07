@@ -1,6 +1,7 @@
 package fr.univlorrainem1archi.friendsfiestas_v1.task.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.TaskDTO;
@@ -64,6 +65,11 @@ public class TaskService implements ITaskService {
         }
         taskRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public List<Task> getTasksBySalon(Salon salon){
+        return taskRepository.findTasksBySalon(salon);
     }
 
     public Task convert(RequestBodyTask task){
