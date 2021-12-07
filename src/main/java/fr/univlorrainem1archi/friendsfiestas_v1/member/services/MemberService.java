@@ -2,6 +2,7 @@ package fr.univlorrainem1archi.friendsfiestas_v1.member.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.repository.MemberRepo;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class MemberService {
-    private MemberRepo memberRepo;
+    private final MemberRepo memberRepo;
 
     public MemberService(MemberRepo memberRepo) {
         this.memberRepo = memberRepo;
@@ -30,8 +31,8 @@ public class MemberService {
         return memberRepo.findById(idMember).orElseThrow();
     }
 
-    public List<Member> getMembersBySalonId(Long salonId){
-        return memberRepo.findMembersBySalon(salonId);
+    public List<Member> getMembersBySalonId(Salon salon){
+        return memberRepo.findMembersBySalon(salon);
     }
 
     public Member update(Long idMember, Member member) {
