@@ -156,7 +156,7 @@ public class SalonController {
     //////////Test
     @GetMapping("/{idSalon}/voir-messages")
     public ResponseEntity<Response> getmessages(@PathVariable("idSalon") Long idSalon){
-        return new ResponseBuilder(OK,"Retrieving all messages","messages",salonService.getMessagesBySalon(idSalon)).buildResponse();
+        return new ResponseBuilder(OK,"Retrieving all messages","messages",salonService.getMessages(idSalon)).buildResponse();
     }
 
 }

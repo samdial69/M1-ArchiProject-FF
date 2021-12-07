@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -141,18 +142,32 @@ public class SalonService implements ISalonService{
         return memberService.getMembersBySalonId(salon);
     }
 
-    public List<List<Member>> getMessagesBySalon(Long salonId){
+    public List<List<? extends List<?>>> getMessagesBySalon(Long salonId){
         if (!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
-       return getMembers(salonId).stream()
-               .map(member -> member.getMessages()
-                       .stream()
-                       .map(Message::getMember)
-                       .collect(Collectors.toList())
-               ).collect(Collectors.toList());
+return null;
+//        return getMembers(salonId).stream()
+//                .map(member -> member.getMessages()
+//                        .stream()
+//                        .map(Message::)
+//                        .collect(Collectors.toList())
+//                ).collect(Collectors.toList());
     }
 
+    public List<Map<?, ?>> getMessages(Long salonId){
+        if (!existById(salonId)){
+            throw new IllegalArgumentException("Not salon found by id: "+salonId);
+        }
+        Salon salon = this.getSalon(salonId);
+        List<Message> messages = messageService.getMessages(salon);
+        return messages.stream().map(message -> {
+            return Map.of("id",message.getMember().getUser().getId(),
+                    "pseudo", message.getMember().getUser().getPseudo(),
+                    "content",message.getContent(),
+                    "sendAt",message.getSendAt());
+        }).collect(Collectors.toList());
+    }
     public List<Salon> getSalonByHost(Long hostId){
         return salonRepo.findSalonByHost_Id(hostId);
     }

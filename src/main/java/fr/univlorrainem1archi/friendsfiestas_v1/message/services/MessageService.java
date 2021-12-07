@@ -2,11 +2,13 @@ package fr.univlorrainem1archi.friendsfiestas_v1.message.services;
 
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.repository.MessageRepo;
+import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.Salon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -24,11 +26,12 @@ public class MessageService implements IMessage{
         return messageRepo.save(message);
     }
 
-//    @Override
-//    public List<Message> getMessages(Long salonId) {
-//        log.info("Fetching all tasks");
-//        return messageRepo.findMessagesBySalonId(salonId);
-//    }
+
+    public List<Message> getMessages(Salon salonId) {
+        log.info("Fetching all tasks");
+        return messageRepo.findMessagesByMember_Salon(salonId);
+    }
+
 //
 //    @Override
 //    public Message create(Message message) {
