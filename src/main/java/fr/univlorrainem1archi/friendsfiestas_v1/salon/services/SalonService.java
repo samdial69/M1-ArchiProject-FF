@@ -156,18 +156,12 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public List<Map<?, ?>> getMessages(Long salonId){
+    public List<Message> getMessages(Long salonId){
         if (!existById(salonId)){
             throw new IllegalArgumentException("Not salon found by id: "+salonId);
         }
         Salon salon = this.getSalon(salonId);
-        List<Message> messages = messageService.getMessages(salon);
-        return messages.stream().map(message -> {
-            return Map.of("id",message.getMember().getUser().getId(),
-                    "pseudo", message.getMember().getUser().getPseudo(),
-                    "content",message.getContent(),
-                    "sendAt",message.getSendAt());
-        }).collect(Collectors.toList());
+        return messageService.getMessages(salon);
     }
 
     @Override

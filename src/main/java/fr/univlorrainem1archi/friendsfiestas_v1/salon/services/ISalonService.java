@@ -35,7 +35,8 @@ public interface ISalonService {
     Salon deleteTask(Long idSalon, Long idTask);
 
     Salon addMessage(Long idSalon, Long idMember, Message message);
-    List<Map<?, ?>> getMessages(Long salonId);
+//    List<Map<?, ?>> getMessages(Long salonId);
+    List<Message> getMessages(Long salonId);
 
     List<User> getUserPseudoContains(String pseudo);
 }
