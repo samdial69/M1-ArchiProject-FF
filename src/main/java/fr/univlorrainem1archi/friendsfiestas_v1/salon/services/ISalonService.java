@@ -38,5 +38,5 @@ public interface ISalonService {
 //    List<Map<?, ?>> getMessages(Long salonId);
     List<Message> getMessages(Long salonId);
 
-    List<User> getUserPseudoContains(String pseudo);
+    List<User> getUserPseudoLike(String pseudo);
 }

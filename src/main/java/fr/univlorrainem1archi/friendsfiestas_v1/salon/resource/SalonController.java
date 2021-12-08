@@ -3,6 +3,7 @@ package fr.univlorrainem1archi.friendsfiestas_v1.salon.resource;
 import fr.univlorrainem1archi.friendsfiestas_v1.address.model.RequestBodyAddress;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.Response;
 import fr.univlorrainem1archi.friendsfiestas_v1.common.ResponseBuilder;
+import fr.univlorrainem1archi.friendsfiestas_v1.constantes.Search;
 import fr.univlorrainem1archi.friendsfiestas_v1.member.model.Member;
 import fr.univlorrainem1archi.friendsfiestas_v1.message.models.Message;
 import fr.univlorrainem1archi.friendsfiestas_v1.salon.models.RequestBodySalon;
@@ -153,22 +154,21 @@ public class SalonController {
                 salonService.addMessage(idSalon,idMember,message)).buildResponse();
     }
 
-    @GetMapping("{userId}/tous-les-salons")
+    @GetMapping("/{userId}/tous-les-salons")
     public ResponseEntity<Response> getSalonsByMembers(@PathVariable("userId") Long userId){
         return new ResponseBuilder(OK,"Retrieving all salons where am member by id "+userId,"salons",
                 salonService.getSalonsByMembers(userId)).buildResponse();
     }
 
-    //////////Test
     @GetMapping("/{idSalon}/voir-messages")
     public ResponseEntity<Response> getmessages(@PathVariable("idSalon") Long idSalon){
         return new ResponseBuilder(OK,"Retrieving all messages","messages",salonService.getMessages(idSalon)).buildResponse();
     }
 
     @PostMapping("/recherche-utilisateurs")
-    public ResponseEntity<Response> getUserPseudoContains(@RequestBody String pseudo){
+    public ResponseEntity<Response> getUserPseudoContains(@RequestBody Search pseudo){
         return new ResponseBuilder(OK,"Searching user by pseudo contains: "+pseudo,"users",
-                salonService.getUserPseudoContains(pseudo)).buildResponse();
+                salonService.getUserPseudoLike(pseudo.getPseudo())).buildResponse();
     }
 
 }

@@ -165,10 +165,13 @@ public class SalonService implements ISalonService{
     }
 
     @Override
-    public List<User> getUserPseudoContains(String pseudo) {
-        if (!StringUtils.isNotEmpty(pseudo)){
-            throw new IllegalArgumentException("This field can not be empty: "+pseudo);
+    public List<User> getUserPseudoLike(String pseudo) {
+        if (!StringUtils.isNotEmpty(pseudo)) {
+            throw new IllegalArgumentException("This field can not be empty: " + pseudo);
         }
+        //String para = "%"+pseudo.replace("\r\n", "")+"%";
+        //String param = pseudo.trim().replace("\r\n", "").replace("{", "").replace("}", "");
+        //param = "%"+pseudo+"%";
         return userService.getUsersPseudoContains(pseudo);
     }
 
