@@ -11,7 +11,9 @@ import fr.univlorrainem1archi.friendsfiestas_v1.salon.services.SalonService;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.RequestBodyTask;
 import fr.univlorrainem1archi.friendsfiestas_v1.task.models.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -169,6 +171,12 @@ public class SalonController {
     public ResponseEntity<Response> getUserPseudoContains(@RequestBody Search pseudo){
         return new ResponseBuilder(OK,"Searching user by pseudo contains: "+pseudo,"users",
                 salonService.getUserPseudoLike(pseudo.getPseudo())).buildResponse();
+    }
+
+    @GetMapping("/{idSalon}/nb-messages")
+    public ResponseEntity<Response> getMessagesBySalon(@PathVariable("idSalon") Long idSalon){
+        return new ResponseBuilder(OK, "Retrieving all messages by salon id"+idSalon, "number_message",
+                salonService.getMessages(idSalon).size()).buildResponse();
     }
 
 }
